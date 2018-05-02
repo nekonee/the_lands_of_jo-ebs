@@ -10,7 +10,7 @@ Land of great warriors, unknown mysteries, forgotten treasures, bottmless dungeo
 ```
 sudo apt install libsdl2-2.0
 ```
-To install everything necessary for building programs that inslude it
+To install everything necessary for building programs that include it
 ```
 sudo apt install libsdl2-dev
 ```
