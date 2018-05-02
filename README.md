@@ -24,7 +24,7 @@ cd 20161228-libtcod-1.6.2
 cd build/autotools/
 autoreconf -i
 ```
-At this point you can run into some error, probably because you don't have automake and libtool installed. You can install them by typing
+At this point you can run into some errors, probably because you don't have automake and libtool installed. You can install them by typing
 ```
 sudo apt install automake
 sudo apt install libtool
