@@ -3,9 +3,9 @@
 Land of great warriors, unknown mysteries, forgotten treasures, bottmless dungeons.
 
 
-#Setting up the project on GNU/Linux
+# Setting up the project on GNU/Linux
 
-##Installing SDL
+## Installing SDL
 
 ```
 sudo apt install libsdl2-2.0
@@ -15,7 +15,7 @@ To install everything necessary for building programs that inslude it
 sudo apt install libsdl2-dev
 ```
 
-##Installing libtcod
+## Installing libtcod
 ```
 wget https://bitbucket.org/libtcod/libtcod/downloads/20161228-libtcod-1.6.2.tbz2
 tar xf 20161228-libtcod-1.6.2.tbz2
