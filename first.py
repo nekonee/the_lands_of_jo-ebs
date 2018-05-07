@@ -1,8 +1,22 @@
 import libtcodpy as lib
 
 SCREEN_WIDTH = 80
-SCREEN_HEIGHT = 80
+SCREEN_HEIGHT = 50
+MAP_WIDTH = 80
+MAP_HEIGHT = 45
+
+color_dark_wall = lib.Color(0, 0, 100)
+color_dark_ground = lib.Color(50, 50, 150)
+
 LIMIT_FPS = 20
+
+
+class Tile:
+    def __init__(self, blocked, block_sight=None):
+        self.blocked = blocked
+        #if a tile is blocked it also blocks sight
+        if block_sight is None: block_sight = blocked
+        self.block_sight = block_sight
 
 class Character:
     #generic object always represented by character on the screen
@@ -13,8 +27,9 @@ class Character:
         self.color = color
 
     def move(self, dx, dy):
-        self.axis_X += dx
-        self.axis_Y += dy
+        if not map[self.axis_X + dx][self.axis_Y + dy].blocked:
+            self.axis_X += dx
+            self.axis_Y += dy
 
     def draw(self):
         lib.console_set_default_foreground(char_con, self.color)
@@ -22,9 +37,43 @@ class Character:
 
     def clear(self):
         lib.console_put_char(char_con, self.axis_X, self.axis_Y, ' ', lib.BKGND_NONE)
-        
 
+def draw_map():
+    global map
+    map = [[Tile(False)
+            for hgt in range(MAP_HEIGHT)]
+                for wid in range(MAP_WIDTH) ]
+    map[30][22].blocked = True
+    map[30][22].block_sight = True
+    map[29][21].blocked = True
+    map[29][21].block_sight = True
+    map[28][20].blocked = True
+    map[28][20].block_sight = True
+    map[27][19].blocked = True
+    map[27][19].block_sight = True
+    map[26][18].blocked = True
+    map[26][18].block_sight = True
+    map[50][22].blocked = True
+    map[50][22].block_sight = True
 
+def render_all():
+    global color_dark_wall
+    global color_dark_ground
+
+    for h in range(MAP_HEIGHT):
+        for w in range(MAP_WIDTH):
+            wall = map[w][h].block_sight
+            if wall:
+                lib.console_put_char_ex(char_con, w, h, '#', color_dark_wall, lib.BKGND_SET)
+            else:
+                lib.console_put_char_ex(char_con, w, h, '.', color_dark_ground, lib.BKGND_SET)
+                    
+    for object in objects:
+        object.draw()
+
+    lib.console_blit(char_con, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0)
+    
+    
 def handle_keys():
     key = lib.console_check_for_keypress(True)
     
@@ -53,15 +102,16 @@ lib.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'LANDS OF JO-EBS', False)
 lib.sys_set_fps(LIMIT_FPS)
 char_con = lib.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-player = Character(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 , '#', lib.white)
+player = Character(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 , '@', lib.white)
 obstacle = Character((SCREEN_WIDTH/2 -5), SCREEN_HEIGHT/2, '|', lib.red)
 objects=[player, obstacle]
 
-while not lib.console_is_window_closed():
-    for object in objects:
-        object.draw()
+draw_map()
 
-    lib.console_blit(char_con, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0)
+while not lib.console_is_window_closed():
+
+    render_all()
+
     lib.console_flush()
 
     for object in objects:
