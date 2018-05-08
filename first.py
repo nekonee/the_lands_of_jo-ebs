@@ -45,6 +45,15 @@ class Character:
     def clear(self):
         lib.console_put_char(char_con, self.axis_X, self.axis_Y, ' ', lib.BKGND_NONE)
 
+def centering_tunnels(self):
+    center_x = (self.top_left_x + self.bottom_right_x) / 2
+    center_y = (self.top_left_y + self.bottom_right_y) / 2
+    return(center_x, center_y)
+        
+def check_intersection(self, other):
+    return(self.top_left_x <= other.bottom_right_x and self.bottom_right_x >= other.top_left_x and self.top_left_y <= other.bottom_right_y and self.bottom_right_y >= other.top_left_y)
+
+        
 def horizontal_tunnel(x1, x2, y):
     global map
     for x in range(min(x1, x2), max(x1, x2) + 1):
