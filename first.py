@@ -11,6 +11,13 @@ color_dark_ground = lib.Color(50, 50, 150)
 LIMIT_FPS = 20
 
 
+class Rectangle:
+     def __init__(self, x, y, w, h):
+        self.top_left_x = x
+        self.top_left_y = y
+        self.bottom_right_x = x+w
+        self.bottom_right_y = y+h
+
 class Tile:
     def __init__(self, blocked, block_sight=None):
         self.blocked = blocked
@@ -38,23 +45,22 @@ class Character:
     def clear(self):
         lib.console_put_char(char_con, self.axis_X, self.axis_Y, ' ', lib.BKGND_NONE)
 
+def create_room(room):
+    global map
+    for x in range(room.top_left_x + 1, room.bottom_right_x):
+        for y in range(room.top_left_y + 1, room.bottom_right_y):
+            map[x][y].blocked = False
+            map[x][y].block_sight = False
+        
 def draw_map():
     global map
-    map = [[Tile(False)
+    map = [[Tile(True)
             for hgt in range(MAP_HEIGHT)]
                 for wid in range(MAP_WIDTH) ]
-    map[30][22].blocked = True
-    map[30][22].block_sight = True
-    map[29][21].blocked = True
-    map[29][21].block_sight = True
-    map[28][20].blocked = True
-    map[28][20].block_sight = True
-    map[27][19].blocked = True
-    map[27][19].block_sight = True
-    map[26][18].blocked = True
-    map[26][18].block_sight = True
-    map[50][22].blocked = True
-    map[50][22].block_sight = True
+    first_room = Rectangle(20, 15, 10, 15)
+    second_room = Rectangle(50, 15, 10, 15)
+    create_room(first_room)
+    create_room(second_room)
 
 def render_all():
     global color_dark_wall
@@ -102,9 +108,8 @@ lib.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'LANDS OF JO-EBS', False)
 lib.sys_set_fps(LIMIT_FPS)
 char_con = lib.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-player = Character(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 , '@', lib.white)
-obstacle = Character((SCREEN_WIDTH/2 -5), SCREEN_HEIGHT/2, '|', lib.red)
-objects=[player, obstacle]
+player = Character(25, 23, '@', lib.white)
+objects=[player]
 
 draw_map()
 
