@@ -50,6 +50,12 @@ def horizontal_tunnel(x1, x2, y):
     for x in range(min(x1, x2), max(x1, x2) + 1):
         map[x][y].blocked = False
         map[x][y].block_sight = False
+
+def vertical_tunnel(y1, y2, x):
+    global map
+    for y in range(min(y1, y2), max(y1, y2) + 1):
+        map[x][y].blocked = False
+        map[x][y].block_sight = False
         
 def create_room(room):
     global map
@@ -70,6 +76,9 @@ def draw_map():
     horizontal_tunnel(25, 55, 20)
     horizontal_tunnel(25, 55, 21)
     horizontal_tunnel(25, 55, 22)
+    vertical_tunnel(10, 20, 27)
+    vertical_tunnel(10, 20, 28)
+    vertical_tunnel(10, 20, 29)
 
 def render_all():
     global color_dark_wall
