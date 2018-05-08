@@ -45,6 +45,12 @@ class Character:
     def clear(self):
         lib.console_put_char(char_con, self.axis_X, self.axis_Y, ' ', lib.BKGND_NONE)
 
+def horizontal_tunnel(x1, x2, y):
+    global map
+    for x in range(min(x1, x2), max(x1, x2) + 1):
+        map[x][y].blocked = False
+        map[x][y].block_sight = False
+        
 def create_room(room):
     global map
     for x in range(room.top_left_x + 1, room.bottom_right_x):
@@ -61,6 +67,9 @@ def draw_map():
     second_room = Rectangle(50, 15, 10, 15)
     create_room(first_room)
     create_room(second_room)
+    horizontal_tunnel(25, 55, 20)
+    horizontal_tunnel(25, 55, 21)
+    horizontal_tunnel(25, 55, 22)
 
 def render_all():
     global color_dark_wall
