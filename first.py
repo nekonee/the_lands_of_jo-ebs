@@ -1,3 +1,5 @@
+
+
 import libtcodpy as lib
 
 SCREEN_WIDTH = 80
@@ -10,9 +12,13 @@ ROOM_MAX_SIZE = 15
 ROOM_MIN_SIZE = 5
 MAX_ROOMS = 20
 
-color_dark_wall = lib.Color(0, 0, 100)
-color_dark_ground = lib.Color(50, 50, 150)
-color_light_ground = lib.Color(246, 192, 221)
+FIELD_OF_VIEW_ALGO= 0
+FOV_LIGHT_VALLS = True
+TORCH_RADIUS = 7
+
+color_dark_wall = lib.Color(47, 53, 66)
+color_ground = lib.Color(198, 192, 221)
+color_light_wall = lib.Color(71, 109, 254)
 
 LIMIT_FPS = 20
 
@@ -55,8 +61,9 @@ class Character:
             self.axis_Y += dy
 
     def draw(self):
-        lib.console_set_default_foreground(char_con, self.color)
-        lib.console_put_char(char_con, self.axis_X, self.axis_Y, self.character, lib.BKGND_NONE)
+         if lib.map_is_in_fov(fov_map, self.axis_X, self.axis_Y):
+             lib.console_set_default_foreground(char_con, self.color)
+             lib.console_put_char(char_con, self.axis_X, self.axis_Y, self.character, lib.BKGND_NONE)
 
     def clear(self):
         lib.console_put_char(char_con, self.axis_X, self.axis_Y, ' ', lib.BKGND_NONE)
@@ -125,16 +132,27 @@ def draw_map():
 
 def render_all():
     global color_dark_wall
-    global color_dark_ground
-    global color_light_ground
+    global color_light_wall
+    global color_ground
+    global fov_recompute
+
+    if fov_recompute:
+         fov_recompute = False
+         lib.map_compute_fov(fov_map, player.axis_X, player.axis_Y, TORCH_RADIUS, FOV_LIGHT_VALLS, FIELD_OF_VIEW_ALGO)
 
     for h in range(MAP_HEIGHT):
         for w in range(MAP_WIDTH):
+            visible = lib.map_is_in_fov(fov_map, w, h)
             wall = map[w][h].block_sight
-            if wall:
-                lib.console_put_char_ex(char_con, w, h, '#', color_dark_wall, lib.BKGND_SET)
+            if not visible:
+                #not visible- everything's black
+                lib.console_set_char_background(char_con, w, h, color_dark_wall)
             else:
-                lib.console_put_char_ex(char_con, w, h, '.', color_light_ground, lib.BKGND_SET)
+                 #visible                      
+                if wall:
+                    lib.console_put_char_ex(char_con, w, h, '#', color_light_wall, lib.BKGND_SET)
+                else:
+                    lib.console_put_char_ex(char_con, w, h, '.', color_ground, lib.BKGND_SET)
                     
     for object in objects:
         object.draw()
@@ -143,6 +161,8 @@ def render_all():
     
     
 def handle_keys():
+    global fov_recompute
+     
     key = lib.console_check_for_keypress(True)
     
     if key.vk == lib.KEY_ENTER and key.lalt:
@@ -152,22 +172,25 @@ def handle_keys():
     
     if lib.console_is_key_pressed(lib.KEY_UP):
         player.move(0, -1)
+        fov_recompute = True
  
     elif lib.console_is_key_pressed(lib.KEY_DOWN):
         player.move(0, 1)
+        fov_recompute = True
  
     elif lib.console_is_key_pressed(lib.KEY_LEFT):
         player.move(-1, 0)
+        fov_recompute = True
  
     elif lib.console_is_key_pressed(lib.KEY_RIGHT):
         player.move(1, 0)
-
-
+        fov_recompute = True
 
 
 lib.console_set_custom_font('arial10x10.png', lib.FONT_TYPE_GREYSCALE | lib.FONT_LAYOUT_TCOD)
 lib.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'LANDS OF JO-EBS', False)
 lib.sys_set_fps(LIMIT_FPS)
+
 char_con = lib.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 player = Character(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', lib.white)
@@ -176,6 +199,14 @@ player = Character(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', lib.white)
 objects=[player]
 
 draw_map()
+
+fov_map = lib.map_new(MAP_WIDTH, MAP_HEIGHT)
+for y in range(MAP_HEIGHT):
+    for x in range(MAP_WIDTH):
+        lib.map_set_properties(fov_map, x, y, not map[x][y].block_sight, not map[x][y].blocked)
+ 
+ 
+fov_recompute = True
 
 while not lib.console_is_window_closed():
 
