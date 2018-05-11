@@ -1,5 +1,4 @@
 
-
 import libtcodpy as lib
 
 SCREEN_WIDTH = 80
@@ -43,6 +42,7 @@ class Rectangle:
 class Tile:
     def __init__(self, blocked, block_sight=None):
         self.blocked = blocked
+        self.explored = False
         #if a tile is blocked it also blocks sight
         if block_sight is None: block_sight = blocked
         self.block_sight = block_sight
@@ -145,14 +145,16 @@ def render_all():
             visible = lib.map_is_in_fov(fov_map, w, h)
             wall = map[w][h].block_sight
             if not visible:
-                #not visible- everything's black
-                lib.console_set_char_background(char_con, w, h, color_dark_wall)
+                 if map[w][h].explored:
+                    #not visible and not explored- everything's black
+                    lib.console_set_char_background(char_con, w, h, color_dark_wall)
             else:
                  #visible                      
                 if wall:
                     lib.console_put_char_ex(char_con, w, h, '#', color_light_wall, lib.BKGND_SET)
                 else:
                     lib.console_put_char_ex(char_con, w, h, '.', color_ground, lib.BKGND_SET)
+                map[w][h].explored = True
                     
     for object in objects:
         object.draw()
