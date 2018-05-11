@@ -35,3 +35,7 @@ After installing the packages you can proceed with
 make
 cd ../..
 ```
+##Game screenshots- will be updated after adding new features
+
+![Glimpse of a game](https://i.imgur.com/Kun4pNp.gif)
+
