@@ -15,6 +15,8 @@ FIELD_OF_VIEW_ALGO= 0
 FOV_LIGHT_VALLS = True
 TORCH_RADIUS = 7
 
+MAX_ROOM_MONSTERS = 3
+
 color_dark_wall = lib.Color(47, 53, 66)
 color_ground = lib.Color(198, 192, 221)
 color_light_wall = lib.Color(71, 109, 254)
@@ -79,7 +81,27 @@ def vertical_tunnel(y1, y2, x):
     for y in range(min(y1, y2), max(y1, y2) + 1):
         map[x][y].blocked = False
         map[x][y].block_sight = False
-        
+
+
+def place_enemies(room):
+    num_enemies = lib.random_get_int(0, 0, MAX_ROOM_MONSTERS)
+
+    for n in range(num_enemies):
+        #random spot for the monster
+        x = lib.random_get_int(0, room.top_left_x, room.bottom_right_x)
+        y = lib.random_get_int(0, room.top_left_y, room.bottom_right_y)
+
+        #spawning orange wisp(60% chance) or red imp(40% chance)
+        if lib.random_get_int(0, 0, 100) < 60:
+            enemy = Character(x, y, 'W', lib.desaturated_orange)
+        else:
+            enemy = Character(x, y, 'I', lib.darker_red)
+
+        objects.append(enemy)
+
+
+
+
 def create_room(room):
     global map
     for x in range(room.top_left_x + 1, room.bottom_right_x):
@@ -126,7 +148,8 @@ def draw_map():
                   else:
                        vertical_tunnel(previous_y, new_y, previous_x)
                        horizontal_tunnel(previous_x, new_x, previous_y)
-
+                       
+        place_enemies(new_room)
         rooms.append(new_room)
         rooms_num += 1
 
