@@ -2,10 +2,10 @@
 import libtcodpy as lib
 
 SCREEN_WIDTH = 80
-SCREEN_HEIGHT = 50
+SCREEN_HEIGHT = 60
 
 MAP_WIDTH = 80
-MAP_HEIGHT = 50
+MAP_HEIGHT = 45
 
 ROOM_MAX_SIZE = 15
 ROOM_MIN_SIZE = 5
@@ -51,11 +51,12 @@ class Tile:
 
 class Character:
     #generic object always represented by character on the screen
-    def __init__(self, axis_X, axis_Y, character, color):
+    def __init__(self, axis_X, axis_Y, character, color, blocks = False):
         self.axis_X = axis_X
         self.axis_Y = axis_Y
         self.character = character
         self.color = color
+        self.blocks = blocks
 
     def move(self, dx, dy):
         if not map[self.axis_X + dx][self.axis_Y + dy].blocked:
@@ -69,6 +70,24 @@ class Character:
 
     def clear(self):
         lib.console_put_char(char_con, self.axis_X, self.axis_Y, ' ', lib.BKGND_NONE)
+
+
+def player_move_atttack(dx, dy):
+     global fov_recompute
+     x = player.axis_X + dx
+     y = player.axis_Y + dy
+
+     target = None
+     for object in objects:
+          if object.axis_X == x and object.axis_Y == y:
+               target = object
+               break
+     if target is not None:
+          print object.character + " keeps avoiding your attacks"
+     else:
+          player.move(dx, dy)
+          fov_recompute = True
+
         
 def horizontal_tunnel(x1, x2, y):
     global map
@@ -84,22 +103,28 @@ def vertical_tunnel(y1, y2, x):
 
 
 def place_enemies(room):
-    num_enemies = lib.random_get_int(0, 0, MAX_ROOM_MONSTERS)
+     num_enemies = lib.random_get_int(0, 0, MAX_ROOM_MONSTERS)
 
-    for n in range(num_enemies):
-        #random spot for the monster
+     for n in range(num_enemies):
+         #random spot for the monster
         x = lib.random_get_int(0, room.top_left_x, room.bottom_right_x)
         y = lib.random_get_int(0, room.top_left_y, room.bottom_right_y)
 
         #spawning orange wisp(60% chance) or red imp(40% chance)
         if lib.random_get_int(0, 0, 100) < 60:
-            enemy = Character(x, y, 'W', lib.desaturated_orange)
+             enemy = Character(x, y, 'W', lib.desaturated_orange, blocks = True)
         else:
-            enemy = Character(x, y, 'I', lib.darker_red)
+             enemy = Character(x, y, 'I', lib.darker_red, blocks = True)
 
         objects.append(enemy)
 
+def check_blocked(x, y):
+     if map[x][y].blocked:
+          return True
 
+     for object in objects:
+          if object.blocks and object.axis_X == x and object.axis_Y == y:
+               return False
 
 
 def create_room(room):
@@ -190,26 +215,29 @@ def handle_keys():
      
     key = lib.console_check_for_keypress(True)
     
-    if key.vk == lib.KEY_ENTER and key.lalt:
-        lib.console_set_fullscreen(not lib.console_is_fullscreen())
-    elif key.vk == lib.KEY_ESCAPE:
-        return True
-    
-    if lib.console_is_key_pressed(lib.KEY_UP):
-        player.move(0, -1)
-        fov_recompute = True
- 
-    elif lib.console_is_key_pressed(lib.KEY_DOWN):
-        player.move(0, 1)
-        fov_recompute = True
- 
-    elif lib.console_is_key_pressed(lib.KEY_LEFT):
-        player.move(-1, 0)
-        fov_recompute = True
- 
-    elif lib.console_is_key_pressed(lib.KEY_RIGHT):
-        player.move(1, 0)
-        fov_recompute = True
+    if game_state == 'playing':
+        if key.vk == lib.KEY_ENTER and key.lalt:
+            lib.console_set_fullscreen(not lib.console_is_fullscreen())
+        elif key.vk == lib.KEY_ESCAPE:
+            return 'exit'
+
+        if lib.console_is_key_pressed(lib.KEY_UP):
+            player_move_atttack(0, -1)
+            fov_recompute = True
+
+        elif lib.console_is_key_pressed(lib.KEY_DOWN):
+            player_move_atttack(0, 1)
+            fov_recompute = True
+
+        elif lib.console_is_key_pressed(lib.KEY_LEFT):
+            player_move_atttack(-1, 0)
+            fov_recompute = True
+
+        elif lib.console_is_key_pressed(lib.KEY_RIGHT):
+            player_move_atttack(1, 0)
+            fov_recompute = True
+        else:
+             return 'no-turn'
 
 
 lib.console_set_custom_font('arial10x10.png', lib.FONT_TYPE_GREYSCALE | lib.FONT_LAYOUT_TCOD)
@@ -218,7 +246,7 @@ lib.sys_set_fps(LIMIT_FPS)
 
 char_con = lib.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-player = Character(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', lib.white)
+player = Character(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', lib.white, blocks = True)
 #SCREEN_WIDTH/2, SCREEN_HEIGHT/2
 #25, 23
 objects=[player]
@@ -232,6 +260,8 @@ for y in range(MAP_HEIGHT):
  
  
 fov_recompute = True
+game_state = 'playing'
+last_action = None
 
 while not lib.console_is_window_closed():
 
@@ -242,6 +272,11 @@ while not lib.console_is_window_closed():
     for object in objects:
         object.clear()
 
-    keys = handle_keys()
-    if keys:
-        break
+    action = handle_keys()
+    if action == 'exit':
+         break
+
+    if game_state == 'playing' and last_action != 'no-turn':
+         for object in objects:
+              if object != player:
+                   print object.character + "\'s soul still remains on the planet"
