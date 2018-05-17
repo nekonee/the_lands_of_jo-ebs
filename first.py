@@ -1,5 +1,6 @@
 
 import libtcodpy as lib
+from const import const
 
 SCREEN_WIDTH = 80
 SCREEN_HEIGHT = 60
