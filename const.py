@@ -8,6 +8,7 @@ const = {
     "ROOM_MAX_SIZE" : 15,
     "ROOM_MIN_SIZE" : 5,
     "MAX_ROOMS" : 20,
+    "LIMIT_FPS" : 20,
     "color_dark_wall" : lib.Color(47, 53, 66),
     "color_light_wall" : lib.Color(71, 109, 254),
     "color_ground" : lib.Color(198, 192, 221),
