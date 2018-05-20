@@ -14,7 +14,7 @@ def vertical_tunnel(y1, y2, x):
         map[x][y].block_sight = False
 
 
-def render_all(fov, player, map, fov_map):
+def render_all(fov, player, map, fov_map, char_con, objects):
     #call it with fov_recompute
     if fov:
         fov = False
@@ -24,3 +24,19 @@ def render_all(fov, player, map, fov_map):
             for w in range(const.MAP_WIDTH):
                 visible = lib.map_is_in_fov(fov_map, w, h)
                 wall = map[w][h].block_sight
+                if not visible:
+                   if  map[w][h].explored:
+                    #not visible and not explored- everything is black
+                    lib.console_set_char_background(char_con, w, h, const.color_dark_wall)
+                else:
+                    #is visible
+                    if wall:
+                        lib.console_set_char_ex(char_con, w, h, '#', const.color_light_wall, lib.BKGND_SET)
+                    else:
+                        #ground
+                        lib.console_put_char_ex(char_con, w, h, '.', const.color_ground, lib.BKGND_SET)
+
+            for object in objects:
+                object.draw()
+
+            lib.console_blit(char_con, 0, 0, const.SCREEN_WIDTH, const.SCREEN_HEIGHT, 0, 0, 0)

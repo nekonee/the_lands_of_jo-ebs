@@ -21,3 +21,9 @@ curr_map = loader.get_map()
 
 player = placement.place_player()
 enemy = placement.place_enemy()
+
+char_con = lib.console_new(const.MAP_WIDTH, const.MAP_HEIGHT)
+fov_map = lib.map_new(const.MAP_WIDTH, const,MAP_HEIGHT)
+fov_recompute = True
+game_state = 'playing'
+last_action = None
