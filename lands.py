@@ -16,6 +16,7 @@ lib.sys_set_fps(const.LIMIT_FPS)
 
 
 game = GAME
+
 curr_map = loader.get_map()
 
 player = placement.place_player()
