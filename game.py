@@ -1,4 +1,4 @@
-import libtcodpy as lib
+import tcod
 
 fov_recompute = True
 game_state = 'playing'
@@ -14,26 +14,26 @@ class Game:
 
 def handle_keys():
     global fov_recompute
-    key = lib.console_check_for_keypress(True)
+    key = tcod.console_check_for_keypress(True)
     if game_state == 'playing':
-        if key.vk == lib.KEY_ENTER and key.lalt:
-            lib.console_set_fullscreen(not lib.console_is_fullscreen())
-        elif key.vk == lib.KEY_ESCAPE:
+        if key.vk == tcod.KEY_ENTER and key.lalt:
+            tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
+        elif key.vk == tcod.KEY_ESCAPE:
             return 'exit'
 
-        if lib.console_is_key_pressed(lib.KEY_UP):
+        if tcod.console_is_key_pressed(tcod.KEY_UP):
             player_move_atttack(0, -1)
             fov_recompute = True
 
-        elif lib.console_is_key_pressed(lib.KEY_DOWN):
+        elif tcod.console_is_key_pressed(tcod.KEY_DOWN):
             player_move_atttack(0, 1)
             fov_recompute = True
 
-        elif lib.console_is_key_pressed(lib.KEY_LEFT):
+        elif tcod.console_is_key_pressed(tcod.KEY_LEFT):
             player_move_atttack(-1, 0)
             fov_recompute = True
 
-        elif lib.console_is_key_pressed(lib.KEY_RIGHT):
+        elif tcod.console_is_key_pressed(tcod.KEY_RIGHT):
             player_move_atttack(1, 0)
             fov_recompute = True
         else:
