@@ -28,7 +28,9 @@ class Tile:
 
 
 class Character:
-    #generic object represented by ascii char on the screen
+    '''generic object represented by ascii char on the screen
+    '''
+
     def __init__(self, axis_X, axis_Y, character, color, blocks=False):
         self.axis_X = axis_X
         self.axis_Y = axis_Y

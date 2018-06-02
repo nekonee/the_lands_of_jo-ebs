@@ -1,8 +1,9 @@
 import tcod
+from globs import globs
 
-fov_recompute = True
-game_state = 'playing'
-last_action = None
+fov_recompute = globs.fov_recompute
+game_state = globs.game_state
+last_action = globs.last_action
 
 class Game:
     def __init__(self):
@@ -12,7 +13,7 @@ class Game:
         self.action = game_action()
 
 
-def handle_keys():
+def handle_keys(player):
     global fov_recompute
     key = tcod.console_check_for_keypress(True)
     if game_state == 'playing':
@@ -22,19 +23,19 @@ def handle_keys():
             return 'exit'
 
         if tcod.console_is_key_pressed(tcod.KEY_UP):
-            player_move_atttack(0, -1)
+            player.player_move_atttack(0, -1)
             fov_recompute = True
 
         elif tcod.console_is_key_pressed(tcod.KEY_DOWN):
-            player_move_atttack(0, 1)
+            player.player_move_atttack(0, 1)
             fov_recompute = True
 
         elif tcod.console_is_key_pressed(tcod.KEY_LEFT):
-            player_move_atttack(-1, 0)
+            player.player_move_atttack(-1, 0)
             fov_recompute = True
 
         elif tcod.console_is_key_pressed(tcod.KEY_RIGHT):
-            player_move_atttack(1, 0)
+            player.player_move_atttack(1, 0)
             fov_recompute = True
         else:
              return 'no-turn'

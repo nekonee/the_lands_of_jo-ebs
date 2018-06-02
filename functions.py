@@ -1,4 +1,5 @@
 from const import const
+from globs import globs
 
 
 def horizontal_tunnel(x1, x2, y):

@@ -3,6 +3,7 @@ import tcod
 from game import GAME
 from loader import LOADER
 from const import const
+from globs import globs
 from enemies import enemies
 from map import *
 from placement import placement
@@ -22,8 +23,12 @@ curr_map = loader.get_map()
 player = placement.place_player()
 enemy = placement.place_enemy()
 
+globs.objects.extend([player, enemy])
+
+
+
 char_con = tcod.console_new(const.MAP_WIDTH, const.MAP_HEIGHT)
 fov_map = tcod.map_new(const.MAP_WIDTH, const,MAP_HEIGHT)
-fov_recompute = True
-game_state = 'playing'
-last_action = None
+fov_recompute = globs.fov_recompute
+game_state = globs.game_state
+last_action = globs.last_action
