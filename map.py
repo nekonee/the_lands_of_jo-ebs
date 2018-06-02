@@ -1,4 +1,4 @@
-import libtcodpy as lib
+import tcod
 
 from functions import *
 from const import const
@@ -9,11 +9,11 @@ import classes
 
 class Map:
     def __init__(self, min_size, max_size, room):
-        self.width = lib.random_get_int(0, const.ROOM_MIN_SIZE, const.ROOM_MAX_SIZE)
-        self.height = lib.random_get_int(0, const.ROOM_MIN_SIZE, const.ROOM_MAX_SIZE)
+        self.width = tcod.random_get_int(0, const.ROOM_MIN_SIZE, const.ROOM_MAX_SIZE)
+        self.height = tcod.random_get_int(0, const.ROOM_MIN_SIZE, const.ROOM_MAX_SIZE)
         #random position without crossing map's borders
-        self.pos_x = lib.random_get_int(0, 0, const.MAP_WIDTH - width - 1)
-        self.pos_y - lib.random_get_int(0, 0, const.MAP_HEIGHT - height - 1)
+        self.pos_x = tcod.random_get_int(0, 0, const.MAP_WIDTH - width - 1)
+        self.pos_y - tcod.random_get_int(0, 0, const.MAP_HEIGHT - height - 1)
 
     def get_tile(self, blocked, block_sight = None):
         tile = classes.Tile(blocked, block_sight = None)
@@ -54,7 +54,7 @@ class Map:
                 else:
                     #there are other rooms, you should connect them with tunnels
                     (previous_x, previous_y) = rooms(rooms_num - 1).centering()
-                    if lib.random_get_int(0, 0, 1) == 1:
+                    if tcod.random_get_int(0, 0, 1) == 1:
                         horizontal_tunnel(previous_x, new_x, previous_y)
                         vertical_tunnel(previous_y, new_y, previous_x)
                     else:

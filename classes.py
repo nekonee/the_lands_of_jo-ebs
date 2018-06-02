@@ -1,4 +1,4 @@
-import libtcodpy as lib
+import tcod
 
 class Rectangle:
     def __init__(self, x, y, w, h):
