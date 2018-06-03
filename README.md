@@ -33,7 +33,7 @@ pip install -r requirements.txt
 ```
 
 ## Tests
-Nosetest is was already installed in the previous step so you can just proceed with
+Nosetest was already installed in the previous step so you can just proceed with
 ```
 nosetests -s
 ```
