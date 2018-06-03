@@ -34,9 +34,9 @@ pip install -r requirements.txt
 
 ## Tests
 Nosetest is was already installed in the previous step so you can just proceed with
-```nosetests -s
 ```
-
+nosetests -s
+```
 
 ## Game screenshots- will be updated after adding new features
 
