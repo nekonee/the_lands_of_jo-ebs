@@ -1,4 +1,6 @@
 import tcod
+from globs import globs
+
 
 class Rectangle:
     def __init__(self, x, y, w, h):
@@ -28,6 +30,9 @@ class Tile:
 
 
 class Character:
+    global map
+    map = globs['map']
+    
     '''generic object represented by ascii char on the screen
     '''
 

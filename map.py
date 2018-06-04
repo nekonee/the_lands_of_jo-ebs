@@ -2,12 +2,20 @@ import tcod
 
 from functions import *
 from const import const
+from globs import globs
 import classes
 
 
 #generating map - use from classes
 
 class Map:
+    global map
+    map = globs['map']
+    if map is None:
+        map = []
+    else:
+        map = map
+    
     def __init__(self, min_size, max_size, room):
         self.width = tcod.random_get_int(0, const.ROOM_MIN_SIZE, const.ROOM_MAX_SIZE)
         self.height = tcod.random_get_int(0, const.ROOM_MIN_SIZE, const.ROOM_MAX_SIZE)
