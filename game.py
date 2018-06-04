@@ -1,9 +1,9 @@
 import tcod
 from globs import globs
 
-fov_recompute = globs.fov_recompute
-game_state = globs.game_state
-last_action = globs.last_action
+fov_recompute = globs['fov_recompute']
+game_state = globs['game_state']
+last_action = globs['last_action']
 
 class Game:
     def __init__(self):
@@ -15,6 +15,7 @@ class Game:
 
 def handle_keys(player):
     global fov_recompute
+    
     key = tcod.console_check_for_keypress(True)
     if game_state == 'playing':
         if key.vk == tcod.KEY_ENTER and key.lalt:
