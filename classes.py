@@ -4,18 +4,18 @@ from globs import globs
 
 class Rectangle:
     def __init__(self, x, y, w, h):
-        self.top_left_x = x
-        self.top_left_y = y
+        self.top_x = x
+        self.top_y = y
         self.bottom_right_x = x+w
-        self.bottom_right_y = y+h
+        self.bottom_y = y+h
 
     def centering(self):
-        center_x = (self.top_left_x + self.bottom_right_x) / 2
-        center_y = (self.top_left_y + self.bottom_right_y) / 2
+        center_x = (self.top_x + self.bottom_x) / 2
+        center_y = (self.top_y + self.bottom_y) / 2
         return(center_x, center_y)
 
     def check_intersection(self, other):
-        return(self.top_left_x <= other.bottom_right_x and self.bottom_right_x >= other.top_left_x and self.top_left_y <= other.bottom_right_y and self.bottom_right_y >= other.top_left_y)
+        return(self.top_x <= other.bottom_x and self.bottom_x >= other.top_x and self.top_y <= other.bottom_y and self.bottom_y >= other.top_y)
 
 
 
