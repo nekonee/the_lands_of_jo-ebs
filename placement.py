@@ -8,10 +8,9 @@ from const import const
 #place the map and characters
 
 
-def place_player():
-    player = classes.Character(globs['SCREEN_WIDTH']/2 , globs['SCREEN_HEIGHT'])
-
-
 def get_map():
     curr_map = Map()
     
+
+def place_player():
+    player = classes.Character(globs['SCREEN_WIDTH']/2 , globs['SCREEN_HEIGHT'])
