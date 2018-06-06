@@ -22,15 +22,15 @@ fov_recompute = globs['fov_recompute']
 game_state = globs['game_state']
 last_action = globs['last_action']
 objects = globs['objects']
-curr_map = globs['map']
-
-
-game = GAME
 
 curr_map = loader.get_map()
-player = placement.place_player()
+player = globs['player']
 enemy = placement.place_enemy()
 
 objects.extend([player, enemy])
 
+
+
+
+game = GAME
 
