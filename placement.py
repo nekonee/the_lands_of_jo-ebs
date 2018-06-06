@@ -1,5 +1,4 @@
 import tdl
-from loader import loader
 import classes
 from map import Map
 from globs import globs
@@ -9,8 +8,9 @@ from const import const
 
 
 def get_map():
-    curr_map = Map()
+    curr_map = classes.Map()
+    globs['map'] = curr_map
     
 
 def place_player():
-    player = classes.Character(globs['SCREEN_WIDTH']/2 , globs['SCREEN_HEIGHT'])
+    player = classes.Character(const['SCREEN_WIDTH']/2 , const['SCREEN_HEIGHT']/2, '@', const['color_player'], blocks = True)
