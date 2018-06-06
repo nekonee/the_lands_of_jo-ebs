@@ -1,9 +1,7 @@
-import placement
-
 globs = {
-    "player" : "placement.place_player()",
+    "player" : None,
     "objects_amount" : 0,
-    "objects" : None,
+    "objects" : [],
     "fov_recompute" : True,
     "game_state" : "playing",
     "last_action" : None,
