@@ -10,11 +10,12 @@ class Game:
         self.keys = handle_keys()
         self.current_map = None
         self.player = None
-        self.action = game_action()
+       # self.action = game_action()
 
 
-def handle_keys(player):
+def handle_keys():
     global fov_recompute
+    player = globs['player']
     
     key = tcod.console_check_for_keypress(True)
     if game_state == 'playing':
