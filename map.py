@@ -72,3 +72,5 @@ class Map:
 
             rooms.append(new_room)
             rooms_num += 1
+
+
