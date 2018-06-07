@@ -17,15 +17,23 @@ tcod.sys_set_fps(const['LIMIT_FPS'])
 
 placement.initialize_glob_player()
 
+        
+
 char_con = tcod.console_new(const['MAP_WIDTH'], const['MAP_HEIGHT'])
 fov_map = tcod.map_new(const['MAP_WIDTH'], const['MAP_HEIGHT'])
 fov_recompute = globs['fov_recompute']
 game_state = globs['game_state']
 last_action = globs['last_action']
 objects = globs['objects']
+map = globs['map']
 
 curr_map = loader.make_map()
 player = globs['player']
+
+fov_map = placement.initialize_fov_map()
+for h in range(const['MAP_HEIGHT']):
+    for w in range(const['MAP_WIDTH']):
+        tcod.map_set_properties(fov_map, x, y, not map[x][y].block_sight, not map[x][y].blocked)
 
 
 objects.append(player)
