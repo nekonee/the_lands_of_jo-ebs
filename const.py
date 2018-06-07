@@ -16,5 +16,6 @@ const = {
     "MAX_ROOM_MONSTERS" : 3,
     "TORCH_RADIUS" : 7,
     "FOV_LIGHT_VALLS" : True,
-    "FIELD_OF_VIEW_ALGO" : 0
+    "FIELD_OF_VIEW_ALGO" : 0,
+    "FOV_MAP" : None
 }
