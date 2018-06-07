@@ -1,5 +1,6 @@
 import tcod
 from globs import globs
+import functions
 
 fov_recompute = globs['fov_recompute']
 game_state = globs['game_state']
@@ -43,4 +44,9 @@ def handle_keys():
              return 'no-turn'
 
 
+
+while not tcod.console_is_window_closed():
+    functions.render_all(globs['fov_recompute'], globs['player'].axis_X, globs['player'].axis_Y)
+
+         
 GAME = Game()
