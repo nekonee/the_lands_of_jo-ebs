@@ -6,7 +6,7 @@ class Rectangle:
     def __init__(self, x, y, w, h):
         self.top_x = x
         self.top_y = y
-        self.bottom_right_x = x+w
+        self.bottom_x = x+w
         self.bottom_y = y+h
 
     def centering(self):
