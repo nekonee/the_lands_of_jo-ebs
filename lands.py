@@ -7,7 +7,6 @@ from globs import globs
 from map import *
 import placement
 import classes
-import loader
 
 
 tcod.console_init_root(const['SCREEN_WIDTH'], const['SCREEN_HEIGHT'], "LANDS OF JO-EBS", False)
@@ -15,9 +14,11 @@ tcod.console_set_custom_font('arial10x10.png', tcod.FONT_TYPE_GREYSCALE | tcod.F
 tcod.sys_set_fps(const['LIMIT_FPS'])
 
 
-placement.initialize_glob_player()
+player = placement.initialize_player()
+globs['player'] = player
 
-        
+curr_map = draw_map()
+globs['map'] = curr_map
 
 char_con = tcod.console_new(const['MAP_WIDTH'], const['MAP_HEIGHT'])
 fov_map = tcod.map_new(const['MAP_WIDTH'], const['MAP_HEIGHT'])
@@ -25,21 +26,20 @@ fov_recompute = globs['fov_recompute']
 game_state = globs['game_state']
 last_action = globs['last_action']
 objects = globs['objects']
-map = globs['map']
-
-curr_map = loader.make_map()
-player = globs['player']
 
 fov_map = placement.initialize_fov_map()
 for h in range(const['MAP_HEIGHT']):
     for w in range(const['MAP_WIDTH']):
-        tcod.map_set_properties(fov_map, x, y, not map[x][y].block_sight, not map[x][y].blocked)
+        tcod.map_set_properties(fov_map, w, h, not map[w][h].block_sight, not map[w][h].blocked)
 
 
 objects.append(player)
 
 
+while not tcod.console_is_window_closed():
+    functions.render_all(globs['fov_recompute'], player.axis_X, player.axis_Y)
 
 
-game = GAME
+
+GAME = Game()
 
