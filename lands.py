@@ -27,19 +27,19 @@ game_state = globs['game_state']
 last_action = globs['last_action']
 objects = globs['objects']
 
-fov_map = placement.initialize_fov_map()
+char_con = tcod.console_new(const['SCREEN_WIDTH'], const['SCREEN_HEIGHT'])
+
+
+
 for h in range(const['MAP_HEIGHT']):
     for w in range(const['MAP_WIDTH']):
-        tcod.map_set_properties(fov_map, w, h, not map[w][h].block_sight, not map[w][h].blocked)
+        tcod.map_set_properties(fov_map, w, h, not curr_map[w][h].block_sight, not curr_map[w][h].blocked)
 
 
 objects.append(player)
 
 
 while not tcod.console_is_window_closed():
-    functions.render_all(globs['fov_recompute'], player.axis_X, player.axis_Y)
-
-
-
+    functions.render_all(globs['fov_recompute'], player, curr_map, fov_map, char_con,objects)
 GAME = Game()
 
