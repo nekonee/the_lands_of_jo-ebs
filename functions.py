@@ -1,3 +1,5 @@
+import tcod
+
 from const import const
 from globs import globs
 
@@ -20,9 +22,9 @@ def vertical_tunnel(y1, y2, x):
 
 def render_all(fov, player, map, fov_map, char_con, objects):
     #call it with fov_recompute
-    if fov:
-        fov = False
-        lib.map_compute_fov(fov_map, player.axis_X, player.axis_Y, const['TORCH_RADIUS'], const['FOV_LIGHT_VALLS'], const['FIELD_OF_VIEW_ALGO'])
+    if fov_map:
+        fov_map = False
+        tcod.map_compute_fov(fov_map, player.axis_X, player.axis_Y, const['TORCH_RADIUS'],const['FOV_LIGHT_VALLS'], const['FIELD_OF_VIEW_ALGO'])
 
         for h in range(const['MAP_HEIGHT']):
             for w in range(const['MAP_WIDTH']):
