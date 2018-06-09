@@ -50,7 +50,7 @@ def draw_map():
         for other_room in rooms:
             if new_room.check_intersection(other_room):
                 fail = True
-                breal
+                break
         if not fail:
             create_room(new_room)
             (new_x, new_y) = new_room.centering()
