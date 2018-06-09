@@ -9,10 +9,6 @@ from globs import globs
 
 global map
 map = globs['map']
-if map is None:
-    map =[[],[]]
-else:
-    map = map
 
 
 
@@ -68,3 +64,4 @@ def draw_map():
                     
         rooms.append(new_room)
         rooms_num += 1
+        return map
