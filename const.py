@@ -17,5 +17,5 @@ const = {
     "TORCH_RADIUS" : 7,
     "FOV_LIGHT_VALLS" : True,
     "FIELD_OF_VIEW_ALGO" : 0,
-    "FOV_MAP" : None
+    "FOV_MAP" : True
 }
