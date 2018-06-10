@@ -23,7 +23,6 @@ globs['map'] = curr_map
 
 placement.initialize_fov_map()
 fov_map = const['FOV_MAP']
-print(fov_map)
 
 char_con = tcod.console_new(const['MAP_WIDTH'], const['MAP_HEIGHT'])
 fov_recompute = globs['fov_recompute']
@@ -44,6 +43,6 @@ objects.append(player)
 
 
 while not tcod.console_is_window_closed():
-    functions.render_all(globs['fov_recompute'], player, curr_map, fov_map, char_con,objects)
+    functions.render_all(fov_recompute, player, curr_map, fov_map, char_con,objects)
 GAME = Game()
 
