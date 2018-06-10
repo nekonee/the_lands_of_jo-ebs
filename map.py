@@ -23,7 +23,7 @@ def create_room(room):
             map[x][y].block_sight = False
 
 
-def draw_map():
+def draw_map(player):
     global map
     
     width = tcod.random_get_int(0, const['ROOM_MIN_SIZE'], const['ROOM_MAX_SIZE'])
@@ -51,8 +51,8 @@ def draw_map():
             create_room(new_room)
             (new_x, new_y) = new_room.centering()
             if rooms_num == 0:
-                globs['player'].axis_X = new_x
-                globs['player'].axis_Y = new_y
+                player.axis_X = new_x
+                player.axis_Y = new_y
             else:
                 (previous_x, previous_y) = rooms[rooms_num -1].centering()
                 if(tcod.random_get_int(0, 0, 1)) == 1:
