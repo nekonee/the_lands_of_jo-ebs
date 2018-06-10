@@ -1,11 +1,12 @@
 import tcod
 
+
+import placement
 from game import GAME
 from const import const
 from globs import globs
 #from enemies import enemies
 from map import *
-import placement
 import classes
 
 
@@ -17,11 +18,14 @@ tcod.sys_set_fps(const['LIMIT_FPS'])
 player = placement.initialize_player()
 globs['player'] = player
 
-curr_map = draw_map()
+curr_map = draw_map(player)
 globs['map'] = curr_map
 
+placement.initialize_fov_map()
+fov_map = const['FOV_MAP']
+print(fov_map)
+
 char_con = tcod.console_new(const['MAP_WIDTH'], const['MAP_HEIGHT'])
-fov_map = tcod.map_new(const['MAP_WIDTH'], const['MAP_HEIGHT'])
 fov_recompute = globs['fov_recompute']
 game_state = globs['game_state']
 last_action = globs['last_action']
