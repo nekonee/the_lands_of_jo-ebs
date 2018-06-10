@@ -15,7 +15,7 @@ const = {
     "color_player" : "tcod.Color(255, 255, 255)",
     "MAX_ROOM_MONSTERS" : 3,
     "TORCH_RADIUS" : 7,
-    "FOV_LIGHT_VALLS" : True,
+    "FOV_LIGHT_WALLS" : True,
     "FIELD_OF_VIEW_ALGO" : 0,
     "FOV_MAP" : None
 }
