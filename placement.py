@@ -12,4 +12,3 @@ def initialize_player():
     player = classes.Character(const['SCREEN_WIDTH']/2 , const['SCREEN_HEIGHT']/2, '@', const['color_player'], blocks = True)
     return player
 
-
