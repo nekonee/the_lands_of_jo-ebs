@@ -12,7 +12,7 @@ const = {
     "color_dark_wall" : tcod.Color(47, 53, 66),
     "color_light_wall" : tcod.Color(71, 109, 254),
     "color_ground" : tcod.Color(198, 192, 221),
-    "color_player" : "tcod.Color(255, 255, 255)",
+    "color_player" : tcod.Color(255, 255, 255),
     "MAX_ROOM_MONSTERS" : 3,
     "TORCH_RADIUS" : 7,
     "FOV_LIGHT_WALLS" : True,
