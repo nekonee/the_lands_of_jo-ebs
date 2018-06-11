@@ -38,12 +38,12 @@ def render_all(fov, player, map, fov_map, char_con, objects):
                 else:
                     #is visible
                     if wall:
-                        tcod.console_set_char_ex(char_con, w, h, '#', const['color_light_wall'], tcod.BKGND_SET)
+                        tcod.console_put_char_ex(char_con, w, h, '#', const['color_light_wall'], tcod.BKGND_SET)
                     else:
                         #ground
                         tcod.console_put_char_ex(char_con, w, h, '.', const['color_ground'], tcod.BKGND_SET)
 
             for object in objects:
-                object.draw(fov_map, char_con)
+                object.draw(fov_map)
 
             tcod.console_blit(char_con, 0, 0, const['SCREEN_WIDTH'], const['SCREEN_HEIGHT'], 0, 0, 0)
