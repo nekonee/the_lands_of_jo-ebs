@@ -47,3 +47,12 @@ class Character:
         if not map[self.axis_X + dx][self.axis_Y + dy].blocked:
             self.axis_X += dx
             self.axis_Y += dy
+
+
+    def draw(self, fov_map, char_con):
+        if tcod.map_is_in_fov(fov_map, self.axis_X, self.axis_Y):
+            tcod.console_set_default_foreground(char_con, self.color)
+            tcod.console_put_char(char_con, self.axis_X, self.axis_Y, self.character,tcod.BKGND_NONE )
+
+    def clear(self, char_con):
+        tcod.console_put_char(char_con, self.axis_X, self.axis_Y, ' ', tcod.BKGND_NONE)
