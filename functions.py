@@ -35,15 +35,15 @@ def render_all(fov, player, map, fov_map, char_con, objects):
                    if  map[w][h].explored:
                     #not visible and not explored- everything is black
                        if wall:
-                           tcod.console_set_char_background(char_con, w, h, const['color_dark_wall'], tcod.BKGND_SET)
+                           tcod.console_set_char_background(char_con, int(w), int(h), const['color_dark_wall'], tcod.BKGND_SET)
                        else:
-                           tcod.console_set_char_background(char_con, w, h, const['color_ground'], tcod.BKGND_SET)
+                           tcod.console_set_char_background(char_con, int(w), int(h), const['color_ground'], tcod.BKGND_SET)
                    else:
                        if wall:
-                           tcod.console_set_char_background(char_con, w, h, const['color_light_wall'], tcod.BKGND_SET)
+                           tcod.console_set_char_background(char_con, int(w), int(h), const['color_light_wall'], tcod.BKGND_SET)
                        else:
                            
-                           tcod.console_set_char_background(char_con, w, h, const['color_ground'], tcod.BKGND_SET)
+                           tcod.console_set_char_background(char_con, int(w), int(h), const['color_ground'], tcod.BKGND_SET)
                        map[w][h].explored = True
 
             for object in objects:
