@@ -54,11 +54,3 @@ class Character:
             tcod.console_set_default_foreground(char_con, self.color)
             tcod.console_put_char(char_con, int(self.axis_X), int(self.axis_Y), self.character, tcod.BKGND_NONE)
 
-
-
-            '''
-            tcod.draw_char(int(self.axis_X), int(self.axis_Y), self.character, self.color, bg=None)
-
-    def clear(self):
-            tcod.draw_char(int(self.axis_X), int(self.axis_Y),' ', self.color, bg=None)
-'''
