@@ -47,6 +47,6 @@ def render_all(fov, player, map, fov_map, char_con, objects):
                        map[w][h].explored = True
 
             for object in objects:
-                object.draw(fov_map)
+                object.draw(fov_map, char_con)
 
             tcod.console_blit(char_con, 0, 0, const['SCREEN_WIDTH'], const['SCREEN_HEIGHT'], 0, 0, 0)
