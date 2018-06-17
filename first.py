@@ -1,6 +1,4 @@
-
-import libtcodpy as lib
-from const import const
+import tcod
 
 SCREEN_WIDTH = 80
 SCREEN_HEIGHT = 60
@@ -18,9 +16,9 @@ TORCH_RADIUS = 7
 
 MAX_ROOM_MONSTERS = 3
 
-color_dark_wall = lib.Color(47, 53, 66)
-color_ground = lib.Color(198, 192, 221)
-color_light_wall = lib.Color(71, 109, 254)
+color_dark_wall = [(47, 53, 66)]
+color_ground = [(198, 192, 221)]
+color_light_wall = [(71, 109, 254)]
 
 LIMIT_FPS = 20
 
@@ -65,12 +63,12 @@ class Character:
             self.axis_Y += dy
 
     def draw(self):
-         if lib.map_is_in_fov(fov_map, self.axis_X, self.axis_Y):
-             lib.console_set_default_foreground(char_con, self.color)
-             lib.console_put_char(char_con, self.axis_X, self.axis_Y, self.character, lib.BKGND_NONE)
+         if tcod.map_is_in_fov(fov_map, self.axis_X, self.axis_Y):
+             tcod.console_set_default_foreground(char_con, self.color)
+             tcod.console_put_char(char_con, self.axis_X, self.axis_Y, self.character, tcod.BKGND_NONE)
 
     def clear(self):
-        lib.console_put_char(char_con, self.axis_X, self.axis_Y, ' ', lib.BKGND_NONE)
+        tcod.console_put_char(char_con, self.axis_X, self.axis_Y, ' ', tcod.BKGND_NONE)
 
 
 def player_move_atttack(dx, dy):
@@ -84,7 +82,7 @@ def player_move_atttack(dx, dy):
                target = object
                break
      if target is not None:
-          print object.character + " keeps avoiding your attacks"
+          print(object.character + " keeps avoiding your attacks")
      else:
           player.move(dx, dy)
           fov_recompute = True
@@ -92,30 +90,34 @@ def player_move_atttack(dx, dy):
         
 def horizontal_tunnel(x1, x2, y):
     global map
-    for x in range(min(x1, x2), max(x1, x2) + 1):
-        map[x][y].blocked = False
-        map[x][y].block_sight = False
+    for x in range(int(min(x1, x2)), int(max(x1, x2)) + 1):
+         x = int(x)
+         y = int(y)
+         map[x][y].blocked = False
+         map[x][y].block_sight = False
 
 def vertical_tunnel(y1, y2, x):
     global map
-    for y in range(min(y1, y2), max(y1, y2) + 1):
-        map[x][y].blocked = False
-        map[x][y].block_sight = False
+    for y in range(int(min(y1, y2)), int(max(y1, y2)) + 1):
+         x = int(x)
+         y = int(y)
+         map[x][y].blocked = False
+         map[x][y].block_sight = False
 
 
 def place_enemies(room):
-     num_enemies = lib.random_get_int(0, 0, MAX_ROOM_MONSTERS)
+     num_enemies = tcod.random_get_int(0, 0, MAX_ROOM_MONSTERS)
 
      for n in range(num_enemies):
          #random spot for the monster
-        x = lib.random_get_int(0, room.top_left_x, room.bottom_right_x)
-        y = lib.random_get_int(0, room.top_left_y, room.bottom_right_y)
+        x = tcod.random_get_int(0, room.top_left_x, room.bottom_right_x)
+        y = tcod.random_get_int(0, room.top_left_y, room.bottom_right_y)
 
         #spawning orange wisp(60% chance) or red imp(40% chance)
-        if lib.random_get_int(0, 0, 100) < 60:
-             enemy = Character(x, y, 'W', lib.desaturated_orange, blocks = True)
+        if tcod.random_get_int(0, 0, 100) < 60:
+             enemy = Character(x, y, 'W', '243, 156, 18', blocks = True)
         else:
-             enemy = Character(x, y, 'I', lib.darker_red, blocks = True)
+             enemy = Character(x, y, 'I', '255, 56, 56', blocks = True)
 
         objects.append(enemy)
 
@@ -143,11 +145,11 @@ def draw_map():
     rooms = []
     rooms_num = 0
     for r in range(MAX_ROOMS):
-        wid = lib.random_get_int(0, ROOM_MIN_SIZE, ROOM_MAX_SIZE)
-        hgt = lib.random_get_int(0, ROOM_MIN_SIZE, ROOM_MAX_SIZE)
+        wid = tcod.random_get_int(0, ROOM_MIN_SIZE, ROOM_MAX_SIZE)
+        hgt = tcod.random_get_int(0, ROOM_MIN_SIZE, ROOM_MAX_SIZE)
         #random position without crossing map's boundaries
-        x = lib.random_get_int(0, 0, MAP_WIDTH - wid - 1)
-        y = lib.random_get_int(0, 0, MAP_HEIGHT - hgt - 1)
+        x = tcod.random_get_int(0, 0, MAP_WIDTH - wid - 1)
+        y = tcod.random_get_int(0, 0, MAP_HEIGHT - hgt - 1)
 
         new_room = Rectangle(x, y, wid, hgt)
 
@@ -168,7 +170,7 @@ def draw_map():
                   #other rooms + connecting them with tunnels
                   #centering coordinates of previous room
                   (previous_x, previous_y) = rooms[rooms_num - 1].centering()
-                  if lib.random_get_int(0, 0, 1) == 1:
+                  if tcod.random_get_int(0, 0, 1) == 1:
                        horizontal_tunnel(previous_x, new_x, previous_y)
                        vertical_tunnel(previous_y, new_y, previous_x)
                   else:
@@ -187,88 +189,92 @@ def render_all():
 
     if fov_recompute:
          fov_recompute = False
-         lib.map_compute_fov(fov_map, player.axis_X, player.axis_Y, TORCH_RADIUS, FOV_LIGHT_VALLS, FIELD_OF_VIEW_ALGO)
+         tcod.map_compute_fov(fov_map, int(player.axis_X), int(player.axis_Y), TORCH_RADIUS, FOV_LIGHT_VALLS, FIELD_OF_VIEW_ALGO)
 
     for h in range(MAP_HEIGHT):
         for w in range(MAP_WIDTH):
-            visible = lib.map_is_in_fov(fov_map, w, h)
+            w = int(w)
+            h = int(h)
+            visible = tcod.map_is_in_fov(fov_map, w, h)
             wall = map[w][h].block_sight
             if not visible:
                  if map[w][h].explored:
                     #not visible and not explored- everything's black
-                    lib.console_set_char_background(char_con, w, h, color_dark_wall)
+                    tcod.console_set_char_background(char_con, w, h, color_dark_wall)
+                 else:
+                      tcod.console_set_char_background(char_con, w, h, color_light_wall)
             else:
-                 #visible                      
-                if wall:
-                    lib.console_put_char_ex(char_con, w, h, '#', color_light_wall, lib.BKGND_SET)
-                else:
-                    lib.console_put_char_ex(char_con, w, h, '.', color_ground, lib.BKGND_SET)
-                map[w][h].explored = True
+                 if wall:
+                      tcod.console_put_char_ex(char_con, w, h, '#',  color_light_wall)
+                 else:
+                      tcod.console_put_char_ex(char_con, w, h, '.',  color_ground)
+
+                 map[w][h].explored = True
                     
     for object in objects:
         object.draw()
 
-    lib.console_blit(char_con, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0)
+    tcod.console_blit(char_con, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0)
     
     
 def handle_keys():
     global fov_recompute
      
-    key = lib.console_check_for_keypress(True)
+    key = tcod.console_check_for_keypress(True)
     
     if game_state == 'playing':
-        if key.vk == lib.KEY_ENTER and key.lalt:
-            lib.console_set_fullscreen(not lib.console_is_fullscreen())
-        elif key.vk == lib.KEY_ESCAPE:
+        if key.vk == tcod.KEY_ENTER and key.lalt:
+            tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
+        elif key.vk == tcod.KEY_ESCAPE:
             return 'exit'
 
-        if lib.console_is_key_pressed(lib.KEY_UP):
+        if tcod.console_is_key_pressed(tcod.KEY_UP):
             player_move_atttack(0, -1)
             fov_recompute = True
 
-        elif lib.console_is_key_pressed(lib.KEY_DOWN):
+        elif tcod.console_is_key_pressed(tcod.KEY_DOWN):
             player_move_atttack(0, 1)
             fov_recompute = True
 
-        elif lib.console_is_key_pressed(lib.KEY_LEFT):
+        elif tcod.console_is_key_pressed(tcod.KEY_LEFT):
             player_move_atttack(-1, 0)
             fov_recompute = True
 
-        elif lib.console_is_key_pressed(lib.KEY_RIGHT):
+        elif tcod.console_is_key_pressed(tcod.KEY_RIGHT):
             player_move_atttack(1, 0)
             fov_recompute = True
         else:
              return 'no-turn'
 
 
-lib.console_set_custom_font('arial10x10.png', lib.FONT_TYPE_GREYSCALE | lib.FONT_LAYOUT_TCOD)
-lib.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'LANDS OF JO-EBS', False)
-lib.sys_set_fps(LIMIT_FPS)
+tcod.console_set_custom_font('arial10x10.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
+tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'LANDS OF JO-EBS', False)
+tcod.sys_set_fps(LIMIT_FPS)
 
-char_con = lib.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
+char_con = tcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-player = Character(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', lib.white, blocks = True)
+player = Character(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', '255, 255, 255', blocks = True)
 #SCREEN_WIDTH/2, SCREEN_HEIGHT/2
 #25, 23
 objects=[player]
 
 draw_map()
 
-fov_map = lib.map_new(MAP_WIDTH, MAP_HEIGHT)
+fov_map = tcod.map_new(MAP_WIDTH, MAP_HEIGHT)
 for y in range(MAP_HEIGHT):
     for x in range(MAP_WIDTH):
-        lib.map_set_properties(fov_map, x, y, not map[x][y].block_sight, not map[x][y].blocked)
+        tcod.map_set_properties(fov_map, x, y, not map[x][y].block_sight, not map[x][y].blocked)
  
  
 fov_recompute = True
 game_state = 'playing'
 last_action = None
 
-while not lib.console_is_window_closed():
+while not tcod.console_is_window_closed():
 
     render_all()
 
-    lib.console_flush()
+    tcod.console_flush()
 
     for object in objects:
         object.clear()
@@ -280,4 +286,4 @@ while not lib.console_is_window_closed():
     if game_state == 'playing' and last_action != 'no-turn':
          for object in objects:
               if object != player:
-                   print object.character + "\'s soul still remains on the planet"
+                   print(object.character + "\'s soul still remains on the planet")
