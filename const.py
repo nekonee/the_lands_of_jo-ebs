@@ -1,4 +1,3 @@
-import tcod
 
 const = {
     "SCREEN_WIDTH" : 80,
