@@ -16,12 +16,13 @@ TORCH_RADIUS = 7
 
 MAX_ROOM_MONSTERS = 3
 
-color_dark_wall = [(47, 53, 66)]
-color_ground = [(198, 192, 221)]
-color_light_wall = [(71, 109, 254)]
+color_dark_wall = (47, 53, 66)
+color_ground = (198, 192, 221)
+color_light_wall = (71, 109, 254)
 
 LIMIT_FPS = 20
 
+char_con = tcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 class Rectangle:
      def __init__(self, x, y, w, h):
@@ -193,23 +194,12 @@ def render_all():
 
     for h in range(MAP_HEIGHT):
         for w in range(MAP_WIDTH):
-            w = int(w)
-            h = int(h)
-            visible = tcod.map_is_in_fov(fov_map, w, h)
+         #   visible = tcod.map_is_in_fov(fov_map, w, h)
             wall = map[w][h].block_sight
-            if not visible:
-                 if map[w][h].explored:
-                    #not visible and not explored- everything's black
-                    tcod.console_set_char_background(char_con, w, h, color_dark_wall)
-                 else:
-                      tcod.console_set_char_background(char_con, w, h, color_light_wall)
+            if wall:
+                 tcod.console_set_char_background(char_con, int(w), int(h), color_dark_wall, tcod.BKGND_SET)
             else:
-                 if wall:
-                      tcod.console_put_char_ex(char_con, w, h, '#',  color_light_wall)
-                 else:
-                      tcod.console_put_char_ex(char_con, w, h, '.',  color_ground)
-
-                 map[w][h].explored = True
+                 tcod.console_set_char_background(char_con, int(w), int(h), color_ground, tcod.BKGND_SET)
                     
     for object in objects:
         object.draw()
@@ -251,7 +241,7 @@ tcod.console_set_custom_font('arial10x10.png', tcod.FONT_TYPE_GREYSCALE | tcod.F
 tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'LANDS OF JO-EBS', False)
 tcod.sys_set_fps(LIMIT_FPS)
 
-char_con = tcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
+
 
 player = Character(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', '255, 255, 255', blocks = True)
 #SCREEN_WIDTH/2, SCREEN_HEIGHT/2
